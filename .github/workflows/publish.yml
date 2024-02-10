@@ -10,13 +10,19 @@ on:
     # If you prefer tags like '1.2.3', without the 'v' prefix, then use:
     # - '[0-9]+.[0-9]+.[0-9]+*' # tag-pattern on pub.dev: ''
     # If your repository contains multiple packages consider a pattern like:
-    # - 'my_package_name-v[0-9]+.[0-9]+.[0-9]+*'
-
-# Publish using the reusable workflow from dart-lang.
+    # - 'my_package_name-v[0-9]+.[0-9]+.[0-9]+*'   
 jobs:
   publish:
+    name: 'Publish to pub.dev'
     permissions:
-      id-token: write # Required for authentication using OIDC
-    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
-    # with:
-    #   working-directory: path/to/package/within/repository
+      id-token: write # This is required for requesting the JWT
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout repository
+      - uses: actions/checkout@v4
+      # Setup Dart SDK with JWT token
+      - uses: dart-lang/setup-dart@b64355ae6ca0b5d484f0106a033dd1388965d06d
+
+      # Publishing...
+      - name: Publish to pub.dev
+        run: dart pub publish --skip-validations -f

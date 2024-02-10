@@ -25,4 +25,4 @@ jobs:
 
       # Publishing...
       - name: Publish to pub.dev
-        run: dart pub publish --skip-validations -f
+        run: dart pub publish --skip-validation -f

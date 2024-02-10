@@ -2,15 +2,8 @@ package com.alper.blackhole_vpn
 
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.net.VpnService
-import android.os.Build
-import android.util.Log
 import androidx.core.app.ActivityCompat.startActivityForResult
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -20,7 +13,6 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
-import java.io.ByteArrayOutputStream
 
 
 /** BlackHoleVpnPlugin */
@@ -32,12 +24,13 @@ class BlackHoleVpnPlugin: FlutterPlugin, MethodCallHandler,ActivityAware, Plugin
   private lateinit var channel : MethodChannel
   private lateinit var result: Result
   private lateinit var allowedApps: List<String>
+  private lateinit var binding: ActivityPluginBinding
   private var activity: Activity? = null
 
+  private val vpnStartCode = 346093690;
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "blackhole_vpn")
   }
-
   override fun onMethodCall(call: MethodCall, result: Result) {
     this.result=result
 
@@ -55,9 +48,9 @@ class BlackHoleVpnPlugin: FlutterPlugin, MethodCallHandler,ActivityAware, Plugin
           this.allowedApps=allowedApps
         val permissionIntent = VpnService.prepare(activity)
         if (permissionIntent==null) {
-          onActivityResult(1,Activity.RESULT_OK,null)
+          onActivityResult(vpnStartCode,Activity.RESULT_OK,null)
         } else {
-          startActivityForResult(activity!!,permissionIntent,1,null)
+          startActivityForResult(activity!!,permissionIntent,vpnStartCode,null)
         }
       }
       }
@@ -66,7 +59,7 @@ class BlackHoleVpnPlugin: FlutterPlugin, MethodCallHandler,ActivityAware, Plugin
           result.error("notAttachedActivity",null,null)
         }
         else {
-          MyVpnService.stopper?.invoke();
+          MyVpnService.stopper?.invoke()
           result.success(null)
         }
       }
@@ -83,6 +76,8 @@ class BlackHoleVpnPlugin: FlutterPlugin, MethodCallHandler,ActivityAware, Plugin
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     activity = binding.activity
+    binding.addActivityResultListener(this)
+    this.binding = binding
     channel.setMethodCallHandler(this)
   }
 
@@ -96,10 +91,11 @@ class BlackHoleVpnPlugin: FlutterPlugin, MethodCallHandler,ActivityAware, Plugin
 
   override fun onDetachedFromActivity() {
    activity=null
+    binding.removeActivityResultListener(this)
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
-    return if (requestCode==1) {
+    return if (requestCode==vpnStartCode) {
       if (resultCode == Activity.RESULT_OK) {
         val vpnService = Intent(activity!!, MyVpnService::class.java)
         vpnService.putExtra("allowedApps",ArrayList(allowedApps))

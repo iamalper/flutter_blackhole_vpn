@@ -1,4 +1,3 @@
-import 'package:blackhole_vpn/app_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -11,9 +10,8 @@ class MethodChannelPerAppVpn implements PerAppVpnPlatform {
   final methodChannel = const MethodChannel('blackhole_vpn');
 
   @override
-  Future<bool> runVpnService(List<App> apps) async =>
-      (await methodChannel.invokeMethod<bool>("startVpn",
-          {"allowedApps": apps.map((e) => e.packageName).toList()}))!;
+  Future<bool> runVpnService(List<String> apps) async => (await methodChannel
+      .invokeMethod<bool>("startVpn", {"allowedApps": apps}))!;
 
   @override
   Future<bool> isActive() async =>
@@ -21,12 +19,4 @@ class MethodChannelPerAppVpn implements PerAppVpnPlatform {
 
   @override
   Future<void> stopVpnService() => methodChannel.invokeMethod<void>("stopVpn");
-
-  @override
-  Future<List<App>> getApps() async {
-    final appsMap = (await methodChannel.invokeListMethod<Map>("getApps"))!;
-    return appsMap
-        .map((e) => App(e["name"], e["packageName"]!, e["icon"]!))
-        .toList();
-  }
 }

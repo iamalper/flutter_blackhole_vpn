@@ -2,36 +2,43 @@ import 'dart:developer' show log;
 
 import 'package:flutter/material.dart';
 import 'package:blackhole_vpn/blackhole_vpn.dart';
+import 'package:android_package_manager/android_package_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding
       .ensureInitialized(); //Add this for using flutter plugin before runApp()
   final isVpnActive = await isActive(); //Get if vpn active or not
-  final apps = await getApps(); //Get installed apps
+
+  //In example app, we use a flutter plugin from here: https://pub.dev/packages/android_package_manager
+  final installedApps =
+      await AndroidPackageManager().getInstalledApplications();
+
+  //Using [Set] instead [List] because same app names may repeat.
+  final installedAppsNames = {
+    for (final app in installedApps!)
+      if (app.name != null) app.name!
+  };
+
   runApp(MyApp(
     isVpnActive: isVpnActive,
-    installedApps: apps,
+    installedAppNames: installedAppsNames.toList(),
   ));
 }
 
 class MyApp extends StatefulWidget {
   const MyApp(
-      {super.key, required this.isVpnActive, required this.installedApps});
+      {super.key, required this.isVpnActive, required this.installedAppNames});
   final bool isVpnActive;
-  final List<App> installedApps;
+  final List<String> installedAppNames;
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  late bool _isVpnOn;
+  late var _isVpnOn = widget.isVpnActive;
+
   //The selected apps for pass to blackhole vpn
-  final _selectedApps = <App>[];
-  @override
-  void initState() {
-    _isVpnOn = widget.isVpnActive;
-    super.initState();
-  }
+  final _selectedApps = <String>[];
 
   @override
   Widget build(BuildContext context) {
@@ -48,23 +55,20 @@ class _MyAppState extends State<MyApp> {
                 : "Select the apps which you want to prevent to connect internet"),
             Expanded(
               child: ListView.builder(
-                itemCount: widget.installedApps.length,
+                itemCount: widget.installedAppNames.length,
                 itemBuilder: (context, index) {
-                  final app = widget.installedApps[index];
+                  final appName = widget.installedAppNames[index];
                   return SwitchListTile(
-                    title: Text(
-                        app.name ?? "\n"), //Use new line if app name is unknown
-                    secondary: app.image,
-                    subtitle: Text(app.packageName),
-                    value: _selectedApps.contains(app),
+                    title: Text(appName),
+                    value: _selectedApps.contains(appName),
                     onChanged: (bool value) {
                       if (value) {
                         setState(() {
-                          _selectedApps.add(app);
+                          _selectedApps.add(appName);
                         });
                       } else {
                         setState(() {
-                          _selectedApps.remove(app);
+                          _selectedApps.remove(appName);
                         });
                       }
                     },

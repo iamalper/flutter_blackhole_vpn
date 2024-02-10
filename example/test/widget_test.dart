@@ -15,7 +15,7 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp(
       isVpnActive: false,
-      installedApps: [],
+      installedAppNames: [],
     ));
 
     // Verify that platform version is retrieved.

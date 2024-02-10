@@ -73,47 +73,8 @@ class BlackHoleVpnPlugin: FlutterPlugin, MethodCallHandler,ActivityAware, Plugin
       "getStatus" -> {
         result.success(MyVpnService.alive)
       }
-      "getApps" -> {
-        if (activity==null) {
-          result.error("notAttachedActivity",null,null)
-        } else {
-          val pm = activity!!.packageManager
-          val apps: List<ApplicationInfo>
-          if (Build.VERSION.SDK_INT<33) {
-          @Suppress("DEPRECATION")
-          apps = pm.getInstalledApplications(0)
-           } else {
-          apps = pm.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0))
-            }
-          val packageMaps = apps.map {
-             val byteArrayOutputStream = ByteArrayOutputStream()
-             drawableToBitmap(it.loadIcon(pm)).compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream)
-             val icon =  byteArrayOutputStream.toByteArray()
-             hashMapOf<String,Any>(
-                "packageName" to it.packageName,
-                "name" to it.name,
-                "icon" to icon
-              )
-          }
-          result.success(packageMaps)
-        }
-      }
     else -> result.notImplemented()
     }
-  }
-  private fun drawableToBitmap(drawable: Drawable): Bitmap {
-    if (drawable is BitmapDrawable) {
-      return drawable.bitmap
-    }
-    var width = drawable.intrinsicWidth
-    width = if (width > 0) width else 1
-    var height = drawable.intrinsicHeight
-    height = if (height > 0) height else 1
-    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-    val canvas = Canvas(bitmap)
-    drawable.setBounds(0, 0, canvas.width, canvas.height)
-    drawable.draw(canvas)
-    return bitmap
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {

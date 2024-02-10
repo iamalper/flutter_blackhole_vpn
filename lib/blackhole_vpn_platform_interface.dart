@@ -1,4 +1,3 @@
-import 'package:blackhole_vpn/app_model.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'blackhole_vpn_method_channel.dart';
@@ -24,7 +23,7 @@ abstract class PerAppVpnPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<bool> runVpnService(List<App> apps) {
+  Future<bool> runVpnService(List<String> apps) {
     throw UnimplementedError('runVpnService() has not been implemented.');
   }
 
@@ -34,9 +33,5 @@ abstract class PerAppVpnPlatform extends PlatformInterface {
 
   Future<bool> isActive() {
     throw UnimplementedError('isActive() has not been implemented.');
-  }
-
-  Future<List<App>> getApps() {
-    throw UnimplementedError('getApps() has not been implemented.');
   }
 }

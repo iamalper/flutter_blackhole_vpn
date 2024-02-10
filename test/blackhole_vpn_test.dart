@@ -11,12 +11,6 @@ class MockPerAppVpnPlatform
   Future<bool> runVpnService(_) async => true;
 
   @override
-  Future<List<App>> getApps() {
-    // TODO: implement getApps
-    throw UnimplementedError();
-  }
-
-  @override
   Future<bool> isActive() {
     // TODO: implement isActive
     throw UnimplementedError();

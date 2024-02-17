@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.VpnService
 import android.os.IBinder
 import android.os.ParcelFileDescriptor
-import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -46,6 +45,12 @@ class MyVpnService : VpnService() {
         return START_NOT_STICKY
 
     }
+
+    override fun onRevoke() {
+        stopper?.invoke()
+        super.onRevoke()
+    }
+
     override fun onBind(intent: Intent): IBinder? {
         return null
     }
@@ -63,6 +68,7 @@ class MyVpnService : VpnService() {
 
     companion object {
         var alive = false
+
         var stopper: (() -> Unit)? = null
     }
 }

@@ -27,13 +27,12 @@ class BlackHoleVpnPlugin: FlutterPlugin, MethodCallHandler,ActivityAware, Plugin
   private lateinit var binding: ActivityPluginBinding
   private var activity: Activity? = null
 
-  private val vpnStartCode = 346093690;
+  private val vpnStartCode = 346093690
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "blackhole_vpn")
   }
   override fun onMethodCall(call: MethodCall, result: Result) {
     this.result=result
-
     when (call.method) {
       "startVpn" -> {
         //Allowed apps for black hole VPN, they can't connect to internet.
@@ -112,5 +111,5 @@ class BlackHoleVpnPlugin: FlutterPlugin, MethodCallHandler,ActivityAware, Plugin
     } else {
       false
     }
-  }
-}
+  }}
+

@@ -2,6 +2,7 @@ package com.alper.blackhole_vpn
 
 import android.content.Intent
 import android.net.VpnService
+import android.os.Binder
 import android.os.IBinder
 import android.os.ParcelFileDescriptor
 import kotlinx.coroutines.CoroutineScope
@@ -19,13 +20,18 @@ import java.nio.channels.FileChannel
 class MyVpnService : VpnService() {
     private var localTunnel:  ParcelFileDescriptor? = null
     private var byteLoop: Job? = null
-
+    private val localBinder = LocalBinder()
+    var statusCallback: ((isActive:Boolean) -> Unit)? = null
+    inner class LocalBinder : Binder() {
+        fun getService() = this@MyVpnService
+    }
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         stopper = {
             byteLoop?.cancel()
             localTunnel?.close()
             localTunnel=null
             alive = false
+            statusCallback?.invoke(false)
             stopSelf()
             stopper=null
         }
@@ -42,6 +48,7 @@ class MyVpnService : VpnService() {
             FileOutputStream(localTunnel!!.fileDescriptor).channel
         )
         alive = true
+        statusCallback?.invoke(true)
         return START_NOT_STICKY
 
     }
@@ -51,8 +58,8 @@ class MyVpnService : VpnService() {
         super.onRevoke()
     }
 
-    override fun onBind(intent: Intent): IBinder? {
-        return null
+    override fun onBind(intent: Intent): IBinder {
+        return localBinder
     }
 
     private fun processBytes(inputFileChannel: FileChannel, outputFileChannel: FileChannel) {

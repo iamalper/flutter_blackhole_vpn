@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'blackhole_vpn_platform_interface.dart';
+export 'vpn_state_observer.dart';
 
 ///Requests permission from user then starts vpn service
 ///

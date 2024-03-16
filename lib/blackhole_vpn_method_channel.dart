@@ -8,6 +8,13 @@ class MethodChannelPerAppVpn implements PerAppVpnPlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
   final methodChannel = const MethodChannel('blackhole_vpn');
+  @visibleForTesting
+  final eventStatusChange = const EventChannel("blackhole_vpn_status_change");
+
+  @override
+  Stream<bool> get vpnStatusStream => eventStatusChange
+      .receiveBroadcastStream()
+      .map((event) => switch (event) { bool _ => event, _ => throw Error() });
 
   @override
   Future<bool> runVpnService(List<String> apps) async => (await methodChannel

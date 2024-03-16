@@ -21,6 +21,10 @@ class MockPerAppVpnPlatform
     // TODO: implement stopVpnService
     throw UnimplementedError();
   }
+
+  @override
+  // TODO: implement vpnStatusStream
+  Stream<bool> get vpnStatusStream => throw UnimplementedError();
 }
 
 void main() {

@@ -50,9 +50,13 @@ class _MyAppState extends State<MyApp> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(_isVpnOn
-                ? "Blackhole vpn active"
-                : "Select the apps which you want to prevent to connect internet"),
+            VpnStateObserver(
+                builder: (isActive) => switch (isActive) {
+                      true => const Text("Blackhole vpn active"),
+                      false => const Text(
+                          "Select the apps which you want to prevent to connect internet"),
+                      null => const Text("Loading")
+                    }),
             Expanded(
               child: ListView.builder(
                 itemCount: widget.installedAppNames.length,

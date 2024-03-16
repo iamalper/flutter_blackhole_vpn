@@ -23,6 +23,8 @@ abstract class PerAppVpnPlatform extends PlatformInterface {
     _instance = instance;
   }
 
+  Stream<bool> get vpnStatusStream;
+
   Future<bool> runVpnService(List<String> apps) {
     throw UnimplementedError('runVpnService() has not been implemented.');
   }

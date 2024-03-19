@@ -89,7 +89,7 @@ class BlackHoleVpnPlugin: FlutterPlugin, MethodCallHandler,ActivityAware, Plugin
       }
       "getStatus" -> {
         result.success(MyVpnService.alive)
-      }5
+      }
     else -> result.notImplemented()
     }
   }

@@ -8,15 +8,15 @@ import 'package:flutter/cupertino.dart';
 class VpnStateObserver extends StatefulWidget {
   final Widget Function(bool? isActive) builder;
 
-  final PerAppVpnPlatform? instance;
+  final BlackholeVpnPlatform? instance;
 
   ///[builder] executed when [isActive] changed.
   ///
   ///[isActive] maybe `null` for a short time because vpn state updates asynchronous.
   ///Use this for loading animations.
   ///
-  ///When [instance] is `null`, default [PerAppVpnPlatform] instance used.
-  ///Set a custom [PerAppVpnPlatform] instance for testing.
+  ///When [instance] is `null`, default [BlackholeVpnPlatform] instance used.
+  ///Set a custom [BlackholeVpnPlatform] instance for testing.
   const VpnStateObserver({super.key, required this.builder, this.instance});
 
   @override
@@ -24,7 +24,7 @@ class VpnStateObserver extends StatefulWidget {
 }
 
 class _VpnStateObserverState extends State<VpnStateObserver> {
-  late final instance = widget.instance ?? PerAppVpnPlatform.instance;
+  late final instance = widget.instance ?? BlackholeVpnPlatform.instance;
   late final childBuilder = widget.builder;
   Future<void>? firstCheckFuture;
   StreamSubscription<bool>? statusSubscription;

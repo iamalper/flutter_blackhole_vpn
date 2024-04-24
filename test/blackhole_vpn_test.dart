@@ -6,7 +6,7 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockPerAppVpnPlatform
     with MockPlatformInterfaceMixin
-    implements PerAppVpnPlatform {
+    implements BlackholeVpnPlatform {
   @override
   Future<bool> runVpnService(_) async => true;
 
@@ -28,15 +28,15 @@ class MockPerAppVpnPlatform
 }
 
 void main() {
-  final PerAppVpnPlatform initialPlatform = PerAppVpnPlatform.instance;
+  final BlackholeVpnPlatform initialPlatform = BlackholeVpnPlatform.instance;
 
-  test('$MethodChannelPerAppVpn is the default instance', () {
-    expect(initialPlatform, isInstanceOf<MethodChannelPerAppVpn>());
+  test('$MethodChannelBlackholeVpn is the default instance', () {
+    expect(initialPlatform, isInstanceOf<MethodChannelBlackholeVpn>());
   });
 
   test('get Vpn instance', () async {
     MockPerAppVpnPlatform fakePlatform = MockPerAppVpnPlatform();
-    PerAppVpnPlatform.instance = fakePlatform;
+    BlackholeVpnPlatform.instance = fakePlatform;
     expect(await runVpnService([]), true);
   }, skip: true);
 }

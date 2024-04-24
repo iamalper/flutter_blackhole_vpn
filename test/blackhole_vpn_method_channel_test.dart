@@ -6,7 +6,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   // ignore: unused_local_variable
-  MethodChannelPerAppVpn platform = MethodChannelPerAppVpn();
+  MethodChannelBlackholeVpn platform = MethodChannelBlackholeVpn();
   const MethodChannel channel = MethodChannel('blackhole_vpn');
 
   setUp(() {

@@ -11,12 +11,12 @@ export 'vpn_state_observer.dart';
 ///It isn't safe to call from background. Calling from Isolate may be
 ///result of unknown behavior.
 Future<bool> runVpnService(List<String> apps) =>
-    PerAppVpnPlatform.instance.runVpnService(apps);
+    BlackholeVpnPlatform.instance.runVpnService(apps);
 
 ///Returns if Vpn service is currently active.
-Future<bool> isActive() => PerAppVpnPlatform.instance.isActive();
+Future<bool> isActive() => BlackholeVpnPlatform.instance.isActive();
 
 ///If Blackhole Vpn is active, stops it.
 ///
 ///Vpn may be stopped from user via vpn notification or system settings.
-Future<void> stopVpn() => PerAppVpnPlatform.instance.stopVpnService();
+Future<void> stopVpn() => BlackholeVpnPlatform.instance.stopVpnService();

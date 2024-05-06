@@ -1,3 +1,9 @@
+## 1.0.0
+
+- Breaking change: Redesign the plugin api for production use
+- Add VpnStatusObserver widget and vpnStatusStream
+- Improve documentation
+
 ## 0.0.2
 
 - Remove app querying:

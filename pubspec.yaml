@@ -1,11 +1,11 @@
 name: blackhole_vpn
 description: Set up a blackhole vpn for prevent specific applications internet connection.
-version: 0.0.2
+version: 1.0.0
 repository: https://github.com/iamalper/flutter_blackhole_vpn
 
 environment:
-  sdk: '>=3.1.1 <4.0.0'
-  flutter: '>=3.3.0'
+  sdk: ">=3.1.1 <4.0.0"
+  flutter: ">=3.3.0"
 
 dependencies:
   flutter:

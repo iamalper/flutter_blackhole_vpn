@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:blackhole_vpn/blackhole_vpn.dart';
 import 'package:android_package_manager/android_package_manager.dart';
 
+final blackholeVpn = BlackholeVpnPlatform.instance;
 void main() async {
   WidgetsFlutterBinding
       .ensureInitialized(); //Add this for using flutter plugin before runApp()
-  final isVpnActive = await isActive(); //Get if vpn active or not
+  final isVpnActive = await blackholeVpn.isActive(); //Get if vpn active or not
 
   //In example app, we use a flutter plugin from here: https://pub.dev/packages/android_package_manager
   final installedApps =
@@ -83,14 +84,16 @@ class _MyAppState extends State<MyApp> {
             ElevatedButton(
                 onPressed: _isVpnOn
                     ? () async {
-                        await stopVpn(); //Stop Blackhole Vpn
+                        await blackholeVpn
+                            .stopVpnService(); //Stop Blackhole Vpn
                         setState(() {
                           _isVpnOn = false;
                         });
                       }
                     : () async {
                         //Start vpn service
-                        final isActivated = await runVpnService(_selectedApps);
+                        final isActivated =
+                            await blackholeVpn.runVpnService(_selectedApps);
                         if (isActivated) {
                           //Vpn permission granted
                           setState(() {

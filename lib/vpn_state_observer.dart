@@ -25,6 +25,7 @@ class VpnStateObserver extends StatefulWidget {
 
 class _VpnStateObserverState extends State<VpnStateObserver> {
   late final instance = widget.instance ?? BlackholeVpnPlatform.instance;
+  late final vpnStatusStream = instance.getVpnStatusStream();
   late final childBuilder = widget.builder;
   Future<void>? firstCheckFuture;
   StreamSubscription<bool>? statusSubscription;
@@ -42,7 +43,7 @@ class _VpnStateObserverState extends State<VpnStateObserver> {
   void initState() {
     super.initState();
     instance.isActive().then((value) => active = value);
-    instance.vpnStatusStream.listen((event) => active = event);
+    vpnStatusStream.listen((event) => active = event);
   }
 
   @override

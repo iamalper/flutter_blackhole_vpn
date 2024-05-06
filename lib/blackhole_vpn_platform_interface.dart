@@ -2,7 +2,7 @@ import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'blackhole_vpn_method_channel.dart';
 
-abstract class BlackholeVpnPlatform extends PlatformInterface {
+class BlackholeVpnPlatform extends PlatformInterface {
   /// Constructs a [BlackholeVpnPlatform].
   BlackholeVpnPlatform() : super(token: _token);
 
@@ -10,7 +10,7 @@ abstract class BlackholeVpnPlatform extends PlatformInterface {
 
   static BlackholeVpnPlatform _instance = MethodChannelBlackholeVpn();
 
-  /// The default instance of [BlackholeVpnPlatform] to use.
+  /// The current instance of [BlackholeVpnPlatform] to use.
   ///
   /// Defaults to [MethodChannelBlackholeVpn].
   static BlackholeVpnPlatform get instance => _instance;
@@ -23,10 +23,12 @@ abstract class BlackholeVpnPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  /// Stream of vpn status changes.
+  /// Returns a stream of vpn status changes.
   ///
   /// Stream emits `true` when vpn is active, `false` when vpn is inactive.
-  Stream<bool> get vpnStatusStream;
+  Stream<bool> getVpnStatusStream() {
+    throw UnimplementedError('getVpnStatusStream() has not been implemented.');
+  }
 
   ///Requests permission from user then starts vpn service
   ///
@@ -42,12 +44,12 @@ abstract class BlackholeVpnPlatform extends PlatformInterface {
 
   ///If Blackhole Vpn is active, stops it.
   ///
-  ///Vpn may be stopped from user via vpn notification or system settings.
+  ///Note: Vpn may be stopped by user via vpn notification or system settings.
   Future<void> stopVpnService() {
     throw UnimplementedError('stopVpnService() has not been implemented.');
   }
 
-  ///Returns if Vpn service is currently active.
+  ///Returns whether the blackhole vpn  is currently active.
   Future<bool> isActive() {
     throw UnimplementedError('isActive() has not been implemented.');
   }

@@ -12,7 +12,7 @@ class MethodChannelBlackholeVpn implements BlackholeVpnPlatform {
   final eventStatusChange = const EventChannel("blackhole_vpn_status_change");
 
   @override
-  Stream<bool> get vpnStatusStream => eventStatusChange
+  Stream<bool> getVpnStatusStream() => eventStatusChange
       .receiveBroadcastStream()
       .map((event) => switch (event) { bool _ => event, _ => throw Error() });
 
